@@ -171,3 +171,25 @@ print(pl1, split = c(1,1,2,2), more=TRUE)
 print(pl2, split = c(1,2,2,2), more=TRUE)
 print(pl3, split = c(2,1,2,2), more=TRUE)
 print(pl4, split = c(2,2,2,2))
+
+#Crossvalidation#
+#Ordinary#
+cv.ck.ok <- gstat.cv(gock.fit)
+summary(cv.ck.ok)
+resid.ok <- as.data.frame(cv.ck.ok)$residual
+sqrt(mean(resid.ok^2))
+mean(resid.ok)
+mean(resid.ok^2/as.data.frame(cv.ck.ok)$au.var)
+##Si quieres calcular todos los residuales añade la opción "all.residuals = TRUE" en gstat.cv#
+cv.ck.ok <- gstat.cv(gock.fit,all.residuals=TRUE)
+
+
+#Universal#
+cv.ck.uk <- gstat.cv(guck.fit)
+summary(cv.ck.uk)
+resid.uk <- as.data.frame(cv.ck.uk)$residual
+sqrt(mean(resid.uk^2))
+mean(resid.uk)
+mean(resid.uk^2/as.data.frame(cv.ck.uk)$au.var)
+#Todos los residuales#
+cv.ck.uk <- gstat.cv(gock.fit,all.residuals=TRUE)
