@@ -16,5 +16,6 @@ El siguiente repositorio contiene los archivos que se emplearán en el taller "C
           
 Durante el taller se realizará el análisis de la Mina Sunshine (Taller2Geo.R). No obstante el código no estará completamente abierto hasta después de la finalización del taller.
 
-
-    
+Más ejercicios y ejemplos:
+* [Workshop: Applied Spatial Statistics in R (Harvard University)](http://www.people.fas.harvard.edu/~zhukov/spatial.html)
+* [Spatial Analysis (wiki)](http://spatial-analyst.net/wiki/index.php?title=Main_Page)
