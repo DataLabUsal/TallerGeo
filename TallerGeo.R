@@ -166,6 +166,10 @@ print(pl3b, split = c(2,2,4,2), more=TRUE)
 print(pl4, split = c(3,2,4,2), more=TRUE)
 print(pl4b, split = c(4,2,4,2))
 
+#Visualizamos la predicción del error de la varianza y covarianzas
+spplot.vcov(cko)
+spplot.vcov(cku)
+
 #Crossvalidation#
 #Ordinary#
 cv.ck.ok <- gstat.cv(gock.fit)
