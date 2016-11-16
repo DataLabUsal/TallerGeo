@@ -4,6 +4,7 @@
 
 install.packages('sp')		#Paquete específico para la representación espacial
 install.packages('gstat')	#Paquete más usado para análisis geoestadístico en R
+install.packages('lattice')	#Paquete lattice (visualización)
 
 library(sp)
 library(gstat)
@@ -59,6 +60,9 @@ m3	<-	plotGoogleMaps(meuse,filename='MiMapa3.htm',iconMarker='http://maps.google
 
 
 ##KRIGING##
+#Variograma en nube
+vg.cloud <- variogram(log(zinc)~1, meuse, cloud = TRUE)
+plot(vg.cloud)
 #Variograma#
 vg.zn <- variogram(log(zinc)~1, AnData)
 dev.off() #Borramos los gráficos anteriores
@@ -75,6 +79,7 @@ plot(vg.zn,vg.zn.fit)
 #Mallado específico para nuestros datos
 data(meuse.grid)
 head(meuse.grid)
+grid_original <- meuse.grid #Guardamos el mallado sin transformar para futuras operaciones
 coordinates(meuse.grid) <- ~x+y
 plot(meuse.grid)
 
@@ -85,6 +90,12 @@ p1 <- spplot(zn.krig["var1.pred"])
 p2 <- spplot(zn.krig["var1.var"])
 print(p1, split=c(1,1,2,1), more=TRUE)
 print(p2, split=c(2,1,2,1), more=TRUE)
+
+#Podemos visualizarlo a través de un levelplot o un contourplot del paquete lattice
+zn.pred <- as.data.frame(zn.krig)$var1.pred
+NEW <- cbind.data.frame(grid_original[,1:2],zn.pred) #Creamos una tabla con las coordenadas de nuestro mallado y los resultados del cokriging
+levelplot(zn.pred~x+y,data=NEW,col.regions = terrain.colors(100),main='Zn predictions')
+contourplot(zn.pred~x+y,data=NEW,cuts=20,col='red',main='Zn predictions')
 
 #Crossvalidation#
 cv.ok <- krige.cv(log(zinc)~1, AnData, model=vg.zn.fit)

@@ -4,11 +4,13 @@
 install.packages('sp')		#Paquete específico para la representación espacial
 install.packages('gstat')	#Paquete más usado para análisis geoestadístico en R
 install.packages('RCurl')	#Paquete HTTP requests
+install.packages('lattice')	#Paquete lattice (visualización)
 
 #Librerías#
 library(sp)
 library(gstat)
-library(Rcurl)
+library(RCurl)
+library(lattice)
 
 #Descargar archivo SunshineMine.csv que puede recuperarse desde la url > https://github.com/DataLabUsal/TallerGeo#
 url1 <- getURL('https://raw.githubusercontent.com/DataLabUsal/TallerGeo/master/SunshineMine.csv')
@@ -38,6 +40,9 @@ print(b2, split = c(1, 2, 1, 2), more = TRUE)
 
 ##KRIGING##
 #Comenzamos con un Ordinary Kriging#
+#Variograma en nube
+vg.cloud <- variogram(log(Au)~1, AnData, cloud = TRUE)
+plot(vg.cloud)
 #Variograma#
 vg.au <- variogram(log(Au)~1, AnData)
 plot(vg.au)
@@ -53,12 +58,19 @@ plot(vg.au,vg.au.fit)
 #Mallado específico para nuestros datos (se puede descargar desde la página https://github.com/DataLabUsal/TallerGeo)#
 url2 <- getURL('https://raw.githubusercontent.com/DataLabUsal/TallerGeo/master/SunshineMine.grid.csv')
 grid <- read.csv(text = url2)
+grid_original <- grid
 coordinates(grid) <- ~Easting+Elevation
 
 ##Ordinary Kriging##
 au.krig <- krige(log(Au)~1, AnData, grid, model = vg.au.fit)
 names(au.krig)
 spplot(au.krig["var1.pred"])
+
+#Podemos visualizarlo a través de un levelplot o un contourplot del paquete lattice
+au.pred <- as.data.frame(au.krig)$var1.pred
+NEW <- cbind.data.frame(grid_original[,1:2],au.pred) #Creamos una tabla con las coordenadas de nuestro mallado y los resultados del cokriging
+levelplot(au.pred~Easting+Elevation,data=NEW,col.regions = terrain.colors(100),main='Au predictions')
+contourplot(au.pred~Easting+Elevation,data=NEW,cuts=50,col='red',main='Au predictions')
 
 #Crossvalidation#
 cv.ok <- krige.cv(log(Au)~1, AnData, grid, model = vg.au.fit)
