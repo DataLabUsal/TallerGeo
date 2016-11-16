@@ -4,11 +4,13 @@
 install.packages('sp')		#Paquete específico para la representación espacial
 install.packages('gstat')	#Paquete más usado para análisis geoestadístico en R
 install.packages('RCurl')	#Paquete HTTP requests
+install.packages('lattice')	#Paquete lattice (visualización)
 
 #Librerías#
 library(sp)
 library(gstat)
 library(Rcurl)
+library(lattice)
 
 #Descargar archivo SunshineMine.csv que puede recuperarse desde la url > https://github.com/DataLabUsal/TallerGeo#
 url1 <- getURL('https://raw.githubusercontent.com/DataLabUsal/TallerGeo/master/SunshineMine.csv')
