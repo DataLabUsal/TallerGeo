@@ -9,7 +9,7 @@ install.packages('lattice')	#Paquete lattice (visualización)
 #Librerías#
 library(sp)
 library(gstat)
-library(Rcurl)
+library(RCurl)
 library(lattice)
 
 #Descargar archivo SunshineMine.csv que puede recuperarse desde la url > https://github.com/DataLabUsal/TallerGeo#
